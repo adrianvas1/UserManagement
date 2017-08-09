@@ -17,6 +17,7 @@ public class ConversationDaoImpl extends AbstractDao<Conversation> {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Conversation.class);
         if (userId != null) {
             criteria.add(Restrictions.eq("userId", userId));
+            criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         }
         return criteria.list();
     }

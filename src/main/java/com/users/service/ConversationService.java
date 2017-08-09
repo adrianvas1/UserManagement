@@ -1,15 +1,19 @@
 package com.users.service;
 
 import com.users.domain.Conversation;
+import com.users.dto.conversation.ConversationPostDto;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author avas
  */
 public interface ConversationService {
 
-    List getConversations(String userId);
+    Set getConversations(String userId);
 
-    Conversation create(Conversation dto);
+    Conversation create(ConversationPostDto dto);
+
+    Conversation getConversationById(String id);
 }

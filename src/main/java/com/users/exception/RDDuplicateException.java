@@ -18,8 +18,6 @@ package com.users.exception;
 
 import javax.ws.rs.core.Response;
 
-import static com.users.util.Constants.DUPLICATE_EXCEPTION_ERROR_CODE;
-
 /**
  * Exception raised whenever attempting to persist an entity that conflicts with data that's already persisted.
  *
@@ -27,7 +25,7 @@ import static com.users.util.Constants.DUPLICATE_EXCEPTION_ERROR_CODE;
  */
 
 @SuppressWarnings("unused")
-public class RDDuplicateException {
+public class RDDuplicateException extends Exception {
 
     private String message;
 

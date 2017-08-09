@@ -1,34 +1,18 @@
-package com.users.domain;
+package com.users.dto.message;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name = "messages")
-public class Message implements Serializable {
+public class MessageGetDto implements Serializable {
 
-    @Id
-    @GenericGenerator(name = "uuid2", strategy = "uuid")
-    @GeneratedValue(generator = "uuid2")
-    @Column(name = "UUID", nullable = false, unique = true, updatable = false)
     private String id;
 
-    @Column(name = "CONTENT")
     private String content;
 
-    @Column(name = "SENDER_UUID")
-    private String senderId;
-
-    @Column(name = "CREATED_DTM", nullable = false)
     private Date createdDtm = new Date();
 
-    @Column(name = "UPDATED_DTM", nullable = false)
     private Date updatedDtm = new Date();
 
-    @Column(name = "CONVERSATION_UUID", nullable = false)
     private String conversationId;
 
     public String getId() {
@@ -45,14 +29,6 @@ public class Message implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
     }
 
     public Date getCreatedDtm() {

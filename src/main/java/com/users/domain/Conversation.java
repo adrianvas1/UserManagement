@@ -1,14 +1,10 @@
 package com.users.domain;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "conversations")
@@ -26,8 +22,11 @@ public class Conversation implements Serializable {
     @Column(name = "USER_UUID", nullable = false)
     private String userId;
 
-    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(FetchMode.JOIN)
+    @Column(name = "PARTICIPANT_IDS", nullable = false)
+    private String participantIds;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "CONVERSATION_UUID")
     private Set<Message> messages = new HashSet<>();
 
     public String getId() {
@@ -54,11 +53,35 @@ public class Conversation implements Serializable {
         this.userId = userId;
     }
 
+    public String getParticipantIds() {
+        return participantIds;
+    }
+
+    public void setParticipantIds(String participantIds) {
+        this.participantIds = participantIds;
+    }
+
     public Set<Message> getMessages() {
         return messages;
     }
 
     public void setMessages(Set<Message> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Conversation that = (Conversation) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
