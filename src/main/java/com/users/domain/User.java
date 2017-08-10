@@ -1,9 +1,11 @@
 package com.users.domain;
 
+import com.users.auth.UserRole;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -24,8 +26,15 @@ public class User implements Serializable {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "USERNAME")
+    private String username;
+
     @Column(name = "PASSWORD")
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "APP_USER_ID", referencedColumnName = "ID")
+    private List<UserRole> roles;
 
     public String getId() {
         return id;
@@ -59,11 +68,27 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
     }
 }

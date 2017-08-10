@@ -1,8 +1,10 @@
 package com.users.service;
 
 import com.users.domain.User;
+import com.users.dto.user.UserPostDto;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -12,7 +14,9 @@ public interface UserService {
 
     List getUserDetails();
 
-    User create(User dto);
+    User create(UserPostDto dto);
 
     List<User> getUsersByIds(Set<String> participantIds);
+
+    Optional<User> getByUsername(String username);
 }

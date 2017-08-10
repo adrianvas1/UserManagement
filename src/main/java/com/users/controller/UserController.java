@@ -3,6 +3,7 @@ package com.users.controller;
 import java.util.List;
 
 import com.users.domain.User;
+import com.users.dto.user.UserPostDto;
 import com.users.exception.RDDuplicateException;
 import com.users.service.UserService;
 import org.slf4j.Logger;
@@ -32,7 +33,13 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity create(@RequestBody User dto) {
+    ResponseEntity create(@RequestBody UserPostDto dto) {
+        User user = userService.create(dto);
+        return new ResponseEntity(user, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    ResponseEntity login(@RequestBody UserPostDto dto) {
         User user = userService.create(dto);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
