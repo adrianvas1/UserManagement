@@ -19,4 +19,6 @@ public interface UserService {
     List<User> getUsersByIds(Set<String> participantIds);
 
     Optional<User> getByUsername(String username);
+
+    User findBySearchQuery(String searchQuery);
 }

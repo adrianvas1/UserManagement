@@ -17,4 +17,13 @@ public class UserDaoImpl extends AbstractDao<User> {
                 .add(Restrictions.eq("username", username))
                 .uniqueResult();
     }
+
+    public User findBySearchQuery(String searchQuery) {
+        return (User) sessionFactory.getCurrentSession().createCriteria(User.class)
+                .add(Restrictions.disjunction()
+                        .add(Restrictions.eq("firstName", searchQuery))
+                        .add(Restrictions.eq("lastName", searchQuery))
+                        .add(Restrictions.eq("email", searchQuery))
+                ).uniqueResult();
+    }
 }

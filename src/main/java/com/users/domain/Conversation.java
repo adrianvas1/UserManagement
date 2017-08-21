@@ -1,5 +1,7 @@
 package com.users.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,6 +19,8 @@ public class Conversation implements Serializable {
     private String id;
 
     @Column(name = "CREATED_DTM", nullable = false)
+    @JsonProperty(required = true)
+    @ApiModelProperty(notes = "The name of the user", required = true)
     private Date createdDtm = new Date();
 
     @Column(name = "USER_UUID", nullable = false)

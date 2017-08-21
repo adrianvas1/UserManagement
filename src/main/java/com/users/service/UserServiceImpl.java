@@ -55,6 +55,11 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username);
     }
 
+    @Override
+    public User findBySearchQuery(String searchQuery) {
+        return userDao.findBySearchQuery(searchQuery);
+    }
+
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String originalPassword = "password";
         String generatedSecuredPasswordHash = generateStrongPasswordHash(originalPassword);

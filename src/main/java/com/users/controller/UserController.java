@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.users.domain.User;
 import com.users.dto.user.UserPostDto;
-import com.users.exception.RDDuplicateException;
 import com.users.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +41,12 @@ public class UserController {
     ResponseEntity login(@RequestBody UserPostDto dto) {
         User user = userService.create(dto);
         return new ResponseEntity(user, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/search", method = RequestMethod.GET)
+    ResponseEntity search(@RequestParam(name = "searchQuery") String searchQuery) {
+        User user = userService.findBySearchQuery(searchQuery);
+        return new ResponseEntity(user, HttpStatus.ACCEPTED);
     }
 
     @ResponseStatus(value = HttpStatus.CONFLICT, code = HttpStatus.CONFLICT,

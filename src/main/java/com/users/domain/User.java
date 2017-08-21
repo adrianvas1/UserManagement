@@ -32,8 +32,7 @@ public class User implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
-    @OneToMany
-    @JoinColumn(name = "APP_USER_ID", referencedColumnName = "ID")
+    @Transient
     private List<UserRole> roles;
 
     public String getId() {
