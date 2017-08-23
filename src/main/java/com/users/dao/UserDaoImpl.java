@@ -1,10 +1,13 @@
 package com.users.dao;
 
 import com.users.domain.User;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -18,12 +21,13 @@ public class UserDaoImpl extends AbstractDao<User> {
                 .uniqueResult();
     }
 
-    public User findBySearchQuery(String searchQuery) {
-        return (User) sessionFactory.getCurrentSession().createCriteria(User.class)
+    public List<User> findBySearchQuery(String searchQuery) {
+        String decoratedSearchQuery = "%" + searchQuery + "%";
+        return (List) sessionFactory.getCurrentSession().createCriteria(User.class)
                 .add(Restrictions.disjunction()
-                        .add(Restrictions.eq("firstName", searchQuery))
-                        .add(Restrictions.eq("lastName", searchQuery))
-                        .add(Restrictions.eq("email", searchQuery))
-                ).uniqueResult();
+                        .add(Restrictions.like("firstName", decoratedSearchQuery))
+                        .add(Restrictions.like("lastName", decoratedSearchQuery))
+                        .add(Restrictions.like("email", decoratedSearchQuery))
+                ).list();
     }
 }

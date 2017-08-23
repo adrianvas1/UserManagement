@@ -16,7 +16,7 @@ public class ConversationGetDto implements Serializable {
 
     private Set<MessageGetDto> messages = new HashSet<>();
 
-    private List<UserGetDto> participants = new ArrayList<>();
+    private List<UserGetDto> participants = new LinkedList<>();
 
     public String getId() {
         return id;

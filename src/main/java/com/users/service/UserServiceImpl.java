@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findBySearchQuery(String searchQuery) {
+    public List<User> findBySearchQuery(String searchQuery) {
         return userDao.findBySearchQuery(searchQuery);
     }
 

@@ -20,5 +20,5 @@ public interface UserService {
 
     Optional<User> getByUsername(String username);
 
-    User findBySearchQuery(String searchQuery);
+    List<User> findBySearchQuery(String searchQuery);
 }

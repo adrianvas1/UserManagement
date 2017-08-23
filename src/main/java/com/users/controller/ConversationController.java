@@ -1,6 +1,7 @@
 package com.users.controller;
 
 import com.users.domain.Conversation;
+import com.users.dto.conversation.ConversationGetDto;
 import com.users.dto.conversation.ConversationPostDto;
 import com.users.service.ConversationService;
 import com.users.transformer.ConversationTransformer;
@@ -54,7 +55,7 @@ public class ConversationController {
             @ApiResponse(code = 500, message = "Failure")})
     public ResponseEntity getConversationById(@PathVariable(value = "conversationId", required = false) String conversationId) {
 
-        Conversation conversation = conversationService.getConversationById(conversationId);
+        ConversationGetDto conversation = conversationService.getConversationById(conversationId);
         return new ResponseEntity(conversation, HttpStatus.OK);
     }
 
@@ -62,7 +63,7 @@ public class ConversationController {
     ResponseEntity create(@RequestBody ConversationPostDto dto) {
 
 
-        Conversation user = conversationService.create(dto);
+        ConversationGetDto user = conversationService.create(dto);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
 

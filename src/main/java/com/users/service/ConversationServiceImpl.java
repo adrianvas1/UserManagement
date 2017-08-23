@@ -54,19 +54,39 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Transactional
-    public Conversation getConversationById(String id) {
+    public ConversationGetDto getConversationById(String id) {
         Optional<Conversation> conversationOptional = conversationDao.findOne(id);
         if (conversationOptional.isPresent()) {
-            return conversationOptional.get();
+            Conversation conversation = conversationOptional.get();
+            ConversationGetDto conversationGetDto = conversationTransformer.toDto(conversation);
+            List<String> participantIds = new ArrayList<>(Arrays.asList(conversation.getParticipantIds()
+                    .substring(1, conversation.getParticipantIds().length()-1)
+                    .replaceAll("\\s+", "")
+                    .split(",")));
+            Set<String> foo = new HashSet<>(participantIds);
+            List<User> usersByIds = userService.getUsersByIds(foo);
+            List<UserGetDto> userGetDtos = userTransformer.toDtoList(usersByIds);
+            conversationGetDto.setParticipants(userGetDtos);
+            return conversationGetDto;
         } else {
             return null;
         }
     }
 
     @Transactional
-    public Conversation create(ConversationPostDto dto) {
+    public ConversationGetDto create(ConversationPostDto dto) {
         Conversation conversation = conversationTransformer.toDomain(dto);
-        return conversationDao.save(conversation);
+        conversationDao.save(conversation);
+        ConversationGetDto conversationGetDto = conversationTransformer.toDto(conversation);
+        List<String> participantIds = new LinkedList<>(Arrays.asList(conversation.getParticipantIds()
+                .substring(1, conversation.getParticipantIds().length()-1)
+                .replaceAll("\\s+", "")
+                .split(",")));
+        Set<String> foo = new TreeSet<>(participantIds);
+        List<User> usersByIds = userService.getUsersByIds(foo);
+        List<UserGetDto> userGetDtos = userTransformer.toDtoList(usersByIds);
+        conversationGetDto.setParticipants(userGetDtos);
+        return conversationGetDto;
     }
 
 }

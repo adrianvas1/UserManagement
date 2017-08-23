@@ -30,7 +30,9 @@ public class ConversationTransformer {
     public Conversation toDomain(ConversationPostDto dto) {
         Conversation domain = new Conversation();
         BeanUtils.copyProperties(dto, domain, "participantIds");
-        domain.setParticipantIds(dto.getParticipantIds().toString());
+        if (dto.getParticipantIds() != null) {
+            domain.setParticipantIds(dto.getParticipantIds().toString());
+        }
         return domain;
     }
 

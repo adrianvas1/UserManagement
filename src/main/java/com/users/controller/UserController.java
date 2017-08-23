@@ -45,7 +45,7 @@ public class UserController {
 
     @RequestMapping(path = "/search", method = RequestMethod.GET)
     ResponseEntity search(@RequestParam(name = "searchQuery") String searchQuery) {
-        User user = userService.findBySearchQuery(searchQuery);
+        List<User> user = userService.findBySearchQuery(searchQuery);
         return new ResponseEntity(user, HttpStatus.ACCEPTED);
     }
 
