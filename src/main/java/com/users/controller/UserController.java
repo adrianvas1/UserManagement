@@ -31,14 +31,8 @@ public class UserController {
         return new ResponseEntity(userDetails, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
     ResponseEntity create(@RequestBody UserPostDto dto) {
-        User user = userService.create(dto);
-        return new ResponseEntity(user, HttpStatus.CREATED);
-    }
-
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    ResponseEntity login(@RequestBody UserPostDto dto) {
         User user = userService.create(dto);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
@@ -53,6 +47,6 @@ public class UserController {
             reason = "A user with the same e-mail address is already registered. Please try again.")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void conflict() {
-        LOGGER.error("A user with the same e-mail address is already registered. Please try again.");
+        LOGGER.error("Duplicate error. Please try again.");
     }
 }

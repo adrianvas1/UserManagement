@@ -1,16 +1,25 @@
 package com.users.dto.user;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 public class UserPostDto implements Serializable {
 
+    @NotEmpty
     private String firstName;
 
+    @NotEmpty
     private String lastName;
 
+    @NotEmpty
     private String email;
 
+    @NotEmpty
     private String password;
+
+    @NotEmpty
+    private String username;
 
     public String getFirstName() {
         return firstName;
@@ -42,5 +51,13 @@ public class UserPostDto implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

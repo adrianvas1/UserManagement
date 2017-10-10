@@ -15,10 +15,10 @@ import java.util.Optional;
 @Transactional
 public class UserDaoImpl extends AbstractDao<User> {
 
-    public Optional<User> findByUsername(String username) {
-        return (Optional<User>) sessionFactory.getCurrentSession().createCriteria(User.class)
+    public List<User> findByUsername(String username) {
+        return (List<User>) sessionFactory.getCurrentSession().createCriteria(User.class)
                 .add(Restrictions.eq("username", username))
-                .uniqueResult();
+                .list();
     }
 
     public List<User> findBySearchQuery(String searchQuery) {

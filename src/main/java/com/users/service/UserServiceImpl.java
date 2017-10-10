@@ -5,6 +5,10 @@ import com.users.domain.User;
 import com.users.dto.user.UserPostDto;
 import com.users.transformer.UserTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +22,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.Collections.emptyList;
+
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserDaoImpl userDao;
@@ -28,31 +34,36 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserTransformer transformer;
 
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Transactional
     public List getUserDetails() {
         return (List) userDao.findAll();
     }
 
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        List<User> applicationUsers = userDao.findByUsername(username);
+        if (applicationUsers.isEmpty()) {
+            throw new UsernameNotFoundException(username);
+        }
+        User user = applicationUsers.get(0);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), emptyList());
+    }
+
     @Transactional
     public User create(UserPostDto dto) {
         User domain = transformer.toDomain(dto);
-        try {
-            String encryptedPassword = generateStrongPasswordHash(dto.getPassword());
-            domain.setPassword(encryptedPassword);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        domain.setUsername(dto.getEmail());
+        domain.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         return userDao.save(domain);
     }
 
     @Override
     public List<User> getUsersByIds(Set<String> participantIds) {
         return userDao.findByIds(participantIds);
-    }
-
-    @Override
-    public Optional<User> getByUsername(String username) {
-        return userDao.findByUsername(username);
     }
 
     @Override
@@ -101,8 +112,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private static boolean validatePassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException
-    {
+    private static boolean validatePassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String[] parts = storedPassword.split(":");
         int iterations = Integer.parseInt(parts[0]);
         byte[] salt = fromHex(parts[1]);
@@ -113,18 +123,16 @@ public class UserServiceImpl implements UserService {
         byte[] testHash = skf.generateSecret(spec).getEncoded();
 
         int diff = hash.length ^ testHash.length;
-        for(int i = 0; i < hash.length && i < testHash.length; i++)
-        {
+        for (int i = 0; i < hash.length && i < testHash.length; i++) {
             diff |= hash[i] ^ testHash[i];
         }
         return diff == 0;
     }
-    private static byte[] fromHex(String hex) throws NoSuchAlgorithmException
-    {
+
+    private static byte[] fromHex(String hex) throws NoSuchAlgorithmException {
         byte[] bytes = new byte[hex.length() / 2];
-        for(int i = 0; i<bytes.length ;i++)
-        {
-            bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
         }
         return bytes;
     }
