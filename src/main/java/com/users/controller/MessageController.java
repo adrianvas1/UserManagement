@@ -24,10 +24,10 @@ public class MessageController {
     private MessageService messageService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity userDetails() {
+    public ResponseEntity userDetails(@RequestParam(name = "conversationId") String conversationId) {
 
-        List userDetails = messageService.getMessages();
-        return new ResponseEntity(userDetails, HttpStatus.OK);
+        List messages = messageService.getMessages(conversationId);
+        return new ResponseEntity(messages, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)

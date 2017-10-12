@@ -1,7 +1,6 @@
 package com.users.service;
 
 import com.users.dao.MessageDaoImpl;
-import com.users.domain.Conversation;
 import com.users.domain.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,10 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public List getMessages() {
-        return (List) messageDao.findAll();
+    public List getMessages(String conversationId) {
+        if (conversationId == null || conversationId.isEmpty()) {
+            return (List) messageDao.findAll();
+        } else return messageDao.findByConversationId(conversationId);
     }
 
     @Override

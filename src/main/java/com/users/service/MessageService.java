@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface MessageService {
 
-    List getMessages();
+    List getMessages(String conversationId);
 
     Message create(Message dto);
 }
